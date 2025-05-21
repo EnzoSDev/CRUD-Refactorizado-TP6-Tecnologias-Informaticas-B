@@ -1,0 +1,87 @@
+###################### HECHO CON CHAT GPT ###############################
+
+Este código es una aplicación web básica en JavaScript que permite gestionar estudiantes: listar, crear, editar y borrar. A continuación, te hago un resumen claro y detallado de su funcionamiento:
+
+
+
+🌐 Conexión con el backend
+
+    Usa una constante API_URL que apunta a un archivo PHP (server.php) que actúa como backend para procesar las solicitudes (crear, leer, actualizar, borrar estudiantes).
+
+
+
+📦 Al cargar la página
+
+    Se espera a que el contenido del DOM esté cargado con el evento DOMContentLoaded.
+
+    Se obtienen referencias a los elementos HTML: formulario, campos del formulario (nombre, email, edad, id oculto) y la tabla donde se mostrarán los estudiantes.
+
+    Se llama a la función asincrónica fetchStudents() para obtener la lista actual de estudiantes desde el backend y mostrarla en la tabla.
+
+✅ Crear o actualizar estudiante (evento submit del formulario)
+
+    Se captura el evento submit del formulario.
+
+    Se llama a e.preventDefault() para evitar que el formulario se envíe por defecto y recargue la página.
+
+    Se crea un objeto formData con los valores ingresados en los campos del formulario (fullname, email, age).
+
+    Se verifica si el campo oculto studentId tiene un valor:
+
+        Si tiene valor, significa que se está editando un estudiante existente, entonces se usa el método HTTP PUT para actualizar.
+
+        Si está vacío, se está creando un nuevo estudiante, entonces se usa el método POST.
+
+    Si se está editando, se agrega el id al objeto formData.
+
+    Se envía la solicitud al backend usando fetch() con los parámetros:
+
+        method: POST o PUT según corresponda.
+
+        headers: especificando que el contenido es JSON.
+
+        body: el objeto formData convertido a JSON con JSON.stringify().
+
+    Si la respuesta del backend es exitosa (response.ok):
+
+        Se limpia el formulario con studentForm.reset().
+
+        Se limpia el campo oculto studentId para que quede vacío.
+
+        Se llama a fetchStudents() para actualizar la tabla y mostrar los datos actualizados.
+
+    Si la respuesta no es exitosa, muestra una alerta de error.
+
+
+
+📋 Mostrar lista de estudiantes (función fetchStudents)
+
+    Función asincrónica que solicita al backend (usando fetch) todos los estudiantes.
+
+    Convierte la respuesta JSON a un objeto de JS con res.json().
+
+    Limpia la tabla de estudiantes con replaceChildren() para eliminar las filas antiguas.
+
+    Por cada estudiante recibido:
+
+        Crea una fila (<tr>) y celdas (<td>) para nombre, email y edad.
+
+        Crea dos botones:
+
+            Editar: al hacer clic, rellena el formulario con los datos del estudiante y asigna el id al campo oculto studentId para editar luego.
+
+            Borrar: al hacer clic, llama a la función deleteStudent() con el id del estudiante para eliminarlo.
+
+        Añade los botones a una celda de acciones y la fila completa a la tabla.
+
+🗑️ Eliminar estudiante (función deleteStudent)
+
+    Función asincrónica que recibe el id del estudiante a borrar.
+
+    Muestra un cuadro de confirmación con confirm(). Si el usuario cancela, no hace nada.
+
+    Si confirma, envía una solicitud HTTP DELETE al backend con el id en el cuerpo de la petición en formato JSON.
+
+    Si la respuesta es exitosa (response.ok), vuelve a llamar a fetchStudents() para actualizar la tabla.
+
+    Si no es exitosa, muestra una alerta de error.

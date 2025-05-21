@@ -1,0 +1,19 @@
+La vista (HTML) genera una petición al servidor, por ejemplo, al cargar la página por primera vez.
+
+Esto se traduce en una petición GET que realiza el navegador al backend, por medio de una función en el controlador del frontend, como fetchStudents (que se encuentra en frontDispatcher.js). Este controlador del frontend se encarga de enviar la solicitud.
+
+La petición llega a server.php, que actúa como router. Analiza la URL y el método HTTP (GET, POST, etc.). Si la ruta no existe, muestra un error; si la ruta es válida, redirige la petición al archivo de rutas correspondiente, por ejemplo studentsRoutes.php.
+
+En el archivo de rutas, se llama a una función específica del controlador (por ejemplo, handleGet()), y también se carga la configuración de la base de datos (databaseConfig.php).
+
+La función del controlador (ubicada en studentsController.php) se comunica con el modelo, usando funciones como getAllStudents() (que está definida en students.php).
+
+Dentro de esa función del modelo, se realiza la consulta SQL a la base de datos para obtener todos los estudiantes.
+
+El resultado de la base de datos se devuelve al controlador PHP, donde se almacena en un arreglo $data.
+
+Luego, ese arreglo se convierte en un formato que el navegador pueda entender: JSON, utilizando json_encode($data).
+
+Esa respuesta en JSON se envía de vuelta al navegador, donde la recibe el controlador de la vista (JavaScript).
+
+Finalmente, ese controlador procesa el JSON y lo usa para renderizar dinámicamente la interfaz, por ejemplo, completando una tabla en la vista usando HTML y CSS.
