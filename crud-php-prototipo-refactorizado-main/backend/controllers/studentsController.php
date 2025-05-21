@@ -18,7 +18,7 @@ function handleGet($conn) {
     } else {
         $result = getAllStudents($conn);
         $data = [];
-        while ($row = $result->fetch_assoc()) {
+        while ($row = $result->fetch_assoc()) { /* Por cada fila (Arreglo asociativo) se pone un nuevo elemento en data, seria como un push se pone al final y queda un arreglo de arreglos, es decir, cada elemento es una fila con las columnas y sus valores*/
             $data[] = $row;
         }
         echo json_encode($data);
