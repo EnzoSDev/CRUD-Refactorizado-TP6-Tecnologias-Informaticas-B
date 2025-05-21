@@ -32,6 +32,17 @@ function getStudentById($conn, $id) {
     return $stmt->get_result(); /* Devuelve una fila */
 }
 
+/* 
+
+    Inyeccion SQL
+
+    Si alguien hiciera ?id=1 OR 1 = 1, la consulta ya sabe que se espera solo un entero
+    por el ? y la i en bind_param, asi que la parte "OR 1 = 1" se descarta
+
+    El ? de prepare() indica que donde esta va un valor, NO UN CODIGO SQL ejecutable
+
+*/
+
 function createStudent($conn, $fullname, $email, $age) {
     $sql = "INSERT INTO students (fullname, email, age) VALUES (?, ?, ?)";
     $stmt = $conn->prepare($sql);
