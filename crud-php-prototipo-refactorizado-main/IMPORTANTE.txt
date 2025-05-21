@@ -1,0 +1,2 @@
+No importa el metodo que sea, GET, POST, DELETE o PUT. No esta mal pasar en la url los parametros (Por ejemplo el recurso que quiero)
+Despues para trabajarlos uso lo del refactoring 2.0 de la uri y no diferencio el tipo de metodo que se uso, solo uso lo de las barras (/modulo)
