@@ -1,0 +1,65 @@
+Ejercicio 3
+
+A) 
+
+    Opcion Validacion Preventiva (Evito que ocurra el error en la BD, valido la existencia de la materia yo mismo)
+    
+
+
+    Opcion Validacion Reactiva (Ocurre el error y muestro un mensaje)
+    En el catch del try de intentar actualizar o crear 
+    const mensajeError = document.getElementById("mensajeError");
+    mensajeError.style.display = "block";
+
+    y si se pudo hacer
+    document.getElementById('mensajeError').style.display = "none";
+
+    Quitando el console.log para no mostrar datos sobre los errores (Ej: Metodo y archivos)
+
+Agrego un div en el HTML y un span con el mensaje y en css pongo un display none, y cuando se 
+pudo hacer lo pongo en block
+
+B) 
+
+    En el catch del try de intentar actualizar o crear 
+    const mensajeError = document.getElementById("mensajeError");
+    mensajeError.style.display = "block";
+
+    y si se pudo hacer
+    document.getElementById('mensajeError').style.display = "none";
+
+    Quitando el console.log para no mostrar datos sobre los errores (Ej: Metodo y archivos)
+
+Agrego un div en el HTML y desde JS hago lo mismo que en el A pero genero el mensaje de forma dinamica 
+con el textContent, segun Lau puedo reutilizar el script para mostrar diferentes errores
+
+
+C) 
+
+Primero debo eliminar la opcion de eliminacion en cascada en la BD.
+Para esto debo eliminar las FK y luego ponerlas sin la eliminacion en cascada, no se puede cambiar de otra forma
+Desde adminer puedo hacer
+
+SHOW CREATE TABLE students_subjects
+
+Para obtener el nombre de la FK a eliminar
+
+students_subjects_ibfk_1
+students_subjects_ibfk_2
+
+Luego hago
+
+ALTER TABLE students_subjects
+DROP FOREIGN KEY students_subjects_ibfk_1;
+
+ALTER TABLE students_subjects
+DROP FOREIGN KEY students_subjects_ibfk_2;
+
+Ahora las vuelvo a poner
+
+ALTER TABLE students_subjects
+ADD FOREIGN KEY (student_id) REFERENCES students(id);
+
+ALTER TABLE students_subjects
+ADD FOREIGN KEY (subject_id) REFERENCES subjects(id);
+
