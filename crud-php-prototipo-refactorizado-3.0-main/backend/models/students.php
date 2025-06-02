@@ -9,6 +9,19 @@
 *    Iteration   : 3.0 ( prototype )
 */
 
+<<<<<<< HEAD
+=======
+function getStudentRelationById($conn, $id) 
+{
+    $stmt = "SELECT * FROM students_subjects WHERE student_id = ?";
+    $stmt = $conn->prepare($stmt);
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $result->num_rows > 0;
+}
+
+>>>>>>> f3fee3a (Validaciones Preventivas y Ejercicio C)
 function getAllStudents($conn) 
 {
     $sql = "SELECT * FROM students";

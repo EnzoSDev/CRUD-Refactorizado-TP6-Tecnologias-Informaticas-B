@@ -9,6 +9,19 @@
 *    Iteration   : 3.0 ( prototype )
 */
 
+<<<<<<< HEAD
+=======
+function getSubjectRelationById($conn, $id)
+{
+    $sql = "SELECT * FROM students_subjects WHERE subject_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $result->num_rows > 0;
+}
+
+>>>>>>> f3fee3a (Validaciones Preventivas y Ejercicio C)
 function getAllSubjects($conn) 
 {
     $sql = "SELECT * FROM subjects";
@@ -27,6 +40,17 @@ function getSubjectById($conn, $id)
     return $result->fetch_assoc(); 
 }
 
+<<<<<<< HEAD
+=======
+function getSubjectByName($conn, $name){
+    $sql = "SELECT * FROM subjects where name = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $name);
+    $stmt->execute();
+    return $stmt->get_result()->fetch_assoc(); /* Get_result obtiene el objeto mysqli_result y fetch_assoc obtiene la primera fila (En este caso unica) en forma de array asociativo */
+}
+
+>>>>>>> f3fee3a (Validaciones Preventivas y Ejercicio C)
 function createSubject($conn, $name) 
 {
     $sql = "INSERT INTO subjects (name) VALUES (?)";

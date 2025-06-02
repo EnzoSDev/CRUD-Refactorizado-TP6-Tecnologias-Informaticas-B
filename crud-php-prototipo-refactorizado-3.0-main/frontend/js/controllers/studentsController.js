@@ -154,16 +154,32 @@ function fillForm(student)
   
 async function confirmDelete(id) 
 {
+<<<<<<< HEAD
+=======
+    const mensajeError = document.getElementById("mensajeError");
+>>>>>>> f3fee3a (Validaciones Preventivas y Ejercicio C)
     if (!confirm('¿Estás seguro que deseas borrar este estudiante?')) return;
   
     try 
     {
         await studentsAPI.remove(id);
+<<<<<<< HEAD
+=======
+        mensajeError.style.display = "none";
+>>>>>>> f3fee3a (Validaciones Preventivas y Ejercicio C)
         loadStudents();
     } 
     catch (err) 
     {
+<<<<<<< HEAD
         console.error('Error al borrar:', err.message);
+=======
+        //console.error('Error al borrar:', err.message);
+        if(err.error === "STUDENT_IN_USE"){
+            mensajeError.textContent = "El estudiante no se puede borrar porque tiene materias asignadas";
+            mensajeError.style.display = "block";
+        }
+>>>>>>> f3fee3a (Validaciones Preventivas y Ejercicio C)
     }
 }
   

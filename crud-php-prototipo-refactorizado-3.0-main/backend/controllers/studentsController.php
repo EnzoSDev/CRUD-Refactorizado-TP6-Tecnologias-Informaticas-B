@@ -72,6 +72,7 @@ function handleDelete($conn)
 {
     $input = json_decode(file_get_contents("php://input"), true);
 
+<<<<<<< HEAD
     $result = deleteStudent($conn, $input['id']);
     if ($result['deleted'] > 0) /* Si se pudo eliminar */ 
     {
@@ -81,6 +82,25 @@ function handleDelete($conn)
     {
         http_response_code(500);
         echo json_encode(["error" => "No se pudo eliminar"]);
+=======
+    $existe = getStudentRelationById($conn, $input['id']);
+    if ($existe) /* Si existe el estudiante */
+    {
+        http_response_code(404);
+        echo json_encode(["error" => "STUDENT_IN_USE"]);
+    }
+    else{
+        $result = deleteStudent($conn, $input['id']);
+        if ($result['deleted'] > 0) /* Si se pudo eliminar */ 
+        {
+            echo json_encode(["message" => "Eliminado correctamente"]);
+        } 
+        else 
+        {
+            http_response_code(500);
+            echo json_encode(["error" => "No se pudo eliminar"]);
+        }
+>>>>>>> f3fee3a (Validaciones Preventivas y Ejercicio C)
     }
 }
 ?>

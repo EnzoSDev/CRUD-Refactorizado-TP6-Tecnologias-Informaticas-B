@@ -31,6 +31,7 @@ function handlePost($conn)
 {
     $input = json_decode(file_get_contents("php://input"), true);
 
+<<<<<<< HEAD
     $result = createSubject($conn, $input['name']);
     if ($result['inserted'] > 0) 
     {
@@ -40,6 +41,26 @@ function handlePost($conn)
     {
         http_response_code(500);
         echo json_encode(["error" => "No se pudo crear"]);
+=======
+    /* Validacion de materia */
+    /* Busco si ya tengo una materia con el mismo nombre */
+    $existe = getSubjectByName($conn, $input['name']);
+    if($existe == NULL){
+        $result = createSubject($conn, $input['name']);
+        if ($result['inserted'] > 0) 
+        {
+            echo json_encode(["message" => "Materia creada correctamente"]);
+        } 
+        else 
+        {
+            http_response_code(500);
+            echo json_encode(["error" => "No se pudo crear"]);
+        }
+    }
+    else{
+        http_response_code(400);
+        echo json_encode(["error_code" => "SUBJECT_EXISTS"]);
+>>>>>>> f3fee3a (Validaciones Preventivas y Ejercicio C)
     }
 }
 
@@ -62,6 +83,7 @@ function handlePut($conn)
 function handleDelete($conn) 
 {
     $input = json_decode(file_get_contents("php://input"), true);
+<<<<<<< HEAD
     
     $result = deleteSubject($conn, $input['id']);
     if ($result['deleted'] > 0) 
@@ -72,6 +94,27 @@ function handleDelete($conn)
     {
         http_response_code(500);
         echo json_encode(["error" => "No se pudo eliminar"]);
+=======
+
+    $existe = getSubjectRelationById($conn, $input['id']);
+    if($existe)
+    {
+        http_response_code(400);
+        echo json_encode(["error" => "SUBJECT_IN_USE"]);
+        return;
+    }
+    else{
+        $result = deleteSubject($conn, $input['id']);
+        if ($result['deleted'] > 0) 
+        {
+            echo json_encode(["message" => "Materia eliminada correctamente"]);
+        } 
+        else 
+        {
+            http_response_code(500);
+            echo json_encode(["error" => "No se pudo eliminar"]);
+        }
+>>>>>>> f3fee3a (Validaciones Preventivas y Ejercicio C)
     }
 }
 ?>

@@ -49,6 +49,12 @@ function setupSubjectFormHandler()
         {
             //console.error(err.message);
             const mensajeError = document.getElementById("mensajeError");
+<<<<<<< HEAD
+=======
+            if(err.error_code === "SUBJECT_EXISTS"){
+                mensajeError.textContent = "Error al guardar materia duplicada";
+            }
+>>>>>>> f3fee3a (Validaciones Preventivas y Ejercicio C)
             mensajeError.style.display = "block";
         }
   });
@@ -124,15 +130,31 @@ function createSubjectActionsCell(subject)
 
 async function confirmDeleteSubject(id)
 {
+<<<<<<< HEAD
+=======
+    const mensajeError = document.getElementById("mensajeError");
+>>>>>>> f3fee3a (Validaciones Preventivas y Ejercicio C)
     if (!confirm('¿Seguro que deseas borrar esta materia?')) return;
 
     try
     {
         await subjectsAPI.remove(id);
+<<<<<<< HEAD
+=======
+        mensajeError.style.display = "none";
+>>>>>>> f3fee3a (Validaciones Preventivas y Ejercicio C)
         loadSubjects();
     }
     catch (err)
     {
+<<<<<<< HEAD
         console.error('Error al borrar materia:', err.message);
+=======
+        //console.error('Error al borrar la materia:', err.message);
+        if(err.error === "SUBJECT_IN_USE"){
+            mensajeError.textContent = "La materia no se puede borrar porque tiene alumnos asignados";
+            mensajeError.style.display = "block";
+        }
+>>>>>>> f3fee3a (Validaciones Preventivas y Ejercicio C)
     }
 }

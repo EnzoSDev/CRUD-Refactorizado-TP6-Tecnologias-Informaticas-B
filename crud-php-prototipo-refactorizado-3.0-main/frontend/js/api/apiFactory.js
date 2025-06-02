@@ -33,8 +33,21 @@ export function createAPI(moduleName, config = {})  /* Config es un objeto opcio
             body: JSON.stringify(data)
         });
 
+<<<<<<< HEAD
         if (!res.ok) throw new Error(`Error en ${method}`);
         return await res.json();
+=======
+            /* Intento recibir el json */
+            let json;
+            try {
+                json = await res.json();
+            } catch (e) {
+                json = {};
+            }
+
+            if (!res.ok) throw json; // Lanza el objeto de error recibido del backend (Envio el JSON en lugar de un mensaje de error con el metodo)
+                return json;
+>>>>>>> f3fee3a (Validaciones Preventivas y Ejercicio C)
     }
 
     return { /* La funcion createAPI devuelve un objeto con las funciones que se pueden utilizar para interactuar con la API */

@@ -75,8 +75,15 @@ function setupFormHandler()
             clearForm();
             loadRelations();
         } 
+<<<<<<< HEAD
         catch (err) 
         {
+=======
+        catch (err)
+        {
+
+            /* OPCION 1: Dejo que se consulte a la BD con un valor repetido, genero el error y muestro el mensaje */
+>>>>>>> f3fee3a (Validaciones Preventivas y Ejercicio C)
             //console.error('Error guardando relación:', err.message);
             const mensajeError = document.getElementById("mensajeError");
             mensajeError.textContent = "Relacion duplicada";
