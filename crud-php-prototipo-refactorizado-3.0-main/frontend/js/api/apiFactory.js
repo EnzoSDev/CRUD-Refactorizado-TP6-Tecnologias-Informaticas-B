@@ -11,6 +11,7 @@
 export function createAPI(moduleName, config = {})  /* Config es un objeto opcional que permite añadir cambios si se requieren */
 /* Se usa export function para exportar la función createAPI, que se encuentra en el archivo apiFactory.js. */
 {
+    /* Si config.urlOverride esta definido uso su valor, sino usa la url de la derecha */
     const API_URL = config.urlOverride ?? `../../backend/server.php?module=${moduleName}`;
 
     async function sendJSON(method, data)
@@ -36,6 +37,7 @@ export function createAPI(moduleName, config = {})  /* Config es un objeto opcio
     return {
         async fetchAll()
         {
+            /* Por defecto la peticion se hace con GET */
             const res = await fetch(API_URL);
             if (!res.ok) throw new Error("No se pudieron obtener los datos");
             return await res.json();
@@ -50,6 +52,7 @@ export function createAPI(moduleName, config = {})  /* Config es un objeto opcio
         },
         async remove(id)
         {
+            /* Se oasa {id} o {id : id} ya que JSON.stringify recibe un objeto JS, no un entero por ejemplo, por eso le paso un objeto para que pueda convertirlo a JSON */
             return await sendJSON('DELETE', { id });
         }
     };

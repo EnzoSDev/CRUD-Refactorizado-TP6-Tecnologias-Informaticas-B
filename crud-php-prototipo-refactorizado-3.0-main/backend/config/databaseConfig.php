@@ -28,6 +28,7 @@ $conn = new mysqli($host, $user, $password, $database);
 
 if ($conn->connect_error) 
 {
+    /* En caso de error se detienen todas las ejecuciones (Con die o exit se detiene el archivo y el que lo invoca o incluye) */   
     http_response_code(500);
     die(json_encode(["error" => "Database connection failed"]));
 }

@@ -27,10 +27,13 @@ function sendCodeMessage($code, $message = "")
 }
 
 // Respuesta correcta para solicitudes OPTIONS (preflight)
+
+/* El navegador a veces envía una solicitud OPTIONS antes de la solicitud real para verificar qué métodos HTTP y encabezados están permitidos en el recurso solicitado. */
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS')
 {
     sendCodeMessage(200); // 200 OK
 }
+
 
 // Obtener el módulo desde la query string
 $uri = parse_url($_SERVER['REQUEST_URI']); /* Obtiene la URI actual y la descompone en sus componentes */
@@ -44,6 +47,8 @@ $uri = parse_url($_SERVER['REQUEST_URI']); /* Obtiene la URI actual y la descomp
     [
         'scheme' => 'https',
         'host' => 'ejemplo.com',
+
+        Como aca solo estamos descomponiendo la uri, el arreglo solo contendrá la parte de la ruta y los parámetros de consulta:
         'path' => '/productos/listado.php',
         'query' => 'id=12'
     ]
@@ -67,7 +72,7 @@ if (!preg_match('/^\w+$/', $module))
 }
 
 // Buscar el archivo de ruta correspondiente
-$routeFile = __DIR__ . "/routes/{$module}Routes.php";
+$routeFile = __DIR__ . "/routes/{$module}Routes.php"; /* No hago ../ porque siempre parto de la raiz que es la carpeta backend */
 
 if (file_exists($routeFile))
 {
