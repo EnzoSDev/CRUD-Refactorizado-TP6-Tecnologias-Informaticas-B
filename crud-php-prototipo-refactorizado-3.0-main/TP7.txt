@@ -1,0 +1,166 @@
+Ejercicio 3
+
+A) 
+
+    Opcion Validacion Preventiva (Evito que ocurra el error en la BD, valido la existencia de la materia yo mismo)
+    
+    En subjectsController.php hago:
+    $existe = getSubjectByName($conn, $input['name']);
+    if($existe == NULL){
+        $result = createSubject($conn, $input['name']);
+        if ($result['inserted'] > 0) 
+        {
+            echo json_encode(["message" => "Materia creada correctamente"]);
+        } 
+        else 
+        {
+            http_response_code(500);
+            echo json_encode(["error" => "No se pudo crear"]);
+        }
+    }
+    else{
+        http_response_code(400);
+        echo json_encode(["error_code" => "SUBJECT_EXISTS"]);
+    }
+
+
+
+
+    En apiFactory
+    /* Intento recibir el json */
+    let json;
+    try {
+        json = await res.json();
+    } catch (e) {
+        json = {};
+    }
+
+    if (!res.ok) throw json; // Lanza el objeto de error recibido del backend
+        return json;
+
+
+
+    Por ultimo en subjectsController.js
+
+    En el catch del try para intentar crear la materia deberia hacer algo como 
+    catch (err)
+{
+    const mensajeError = document.getElementById("mensajeError");
+    if (err.error_code === "SUBJECT_EXISTS")
+        mensajeError.textContent = "Ya existe una materia con ese nombre";
+    mensajeError.style.display = "block";
+}
+// Con eso deberia mostrar un mensaje por pantalla en el idioma que quiera
+
+Opcion Validacion Reactiva (Ocurre el error y muestro un mensaje)
+En el catch del try de intentar actualizar o crear 
+const mensajeError = document.getElementById("mensajeError");
+mensajeError.style.display = "block";
+
+y si se pudo hacer
+document.getElementById('mensajeError').style.display = "none";
+
+Quitando el console.log para no mostrar datos sobre los errores (Ej: Metodo y archivos)
+
+Agrego un div en el HTML y un span con el mensaje y en css pongo un display none, y cuando se 
+pudo hacer lo pongo en block
+
+B) 
+
+En el catch del try de intentar actualizar o crear 
+const mensajeError = document.getElementById("mensajeError");
+mensajeError.style.display = "block";
+
+y si se pudo hacer
+document.getElementById('mensajeError').style.display = "none";
+
+Quitando el console.log para no mostrar datos sobre los errores (Ej: Metodo y archivos)
+
+Agrego un div en el HTML y desde JS hago lo mismo que en el A pero genero el mensaje de forma dinamica 
+con el textContent, segun Lau puedo reutilizar el script para mostrar diferentes errores
+
+C) 
+
+Primero debo eliminar la opcion de eliminacion en cascada en la BD.
+Para esto debo eliminar las FK y luego ponerlas sin la eliminacion en cascada, no se puede cambiar de otra forma
+Desde adminer puedo hacer
+
+SHOW CREATE TABLE students_subjects
+
+Para obtener el nombre de la FK a eliminar
+
+students_subjects_ibfk_1
+students_subjects_ibfk_2
+
+Luego hago
+
+ALTER TABLE students_subjects
+DROP FOREIGN KEY students_subjects_ibfk_1;
+
+ALTER TABLE students_subjects
+DROP FOREIGN KEY students_subjects_ibfk_2;
+
+Ahora las vuelvo a poner
+
+ALTER TABLE students_subjects
+ADD FOREIGN KEY (student_id) REFERENCES students(id);
+
+ALTER TABLE students_subjects
+ADD FOREIGN KEY (subject_id) REFERENCES subjects(id);
+
+Para el modelo de subjects
+function getSubjectRelationById($conn, $id)
+{
+    $sql = "SELECT * FROM students_subjects WHERE subject_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $result->num_rows > 0;
+}
+
+para el controlador de subjects en handleDelete
+
+$existe = getSubjectRelationById($conn, $input['id']);
+if($existe == true)
+{
+    http_response_code(400);
+    echo json_encode(["error" => "SUBJECT_IN_USE"]);
+    return;
+}
+else{
+    $result = deleteSubject($conn, $input['id']);
+    if ($result['deleted'] > 0) 
+    {
+        echo json_encode(["message" => "Materia eliminada correctamente"]);
+    } 
+    else 
+    {
+        http_response_code(500);
+        echo json_encode(["error" => "No se pudo eliminar"]);
+    }
+}
+
+Luego en el controlador de subjects del JS
+async function confirmDeleteSubject(id)
+{
+    const mensajeError = document.getElementById("mensajeError");
+    if (!confirm('¿Seguro que deseas borrar esta materia?')) return;
+
+    try
+    {
+        await subjectsAPI.remove(id);
+        mensajeError.style.display = "none";
+        loadSubjects();
+    }
+    catch (err)
+    {
+        //console.error('Error al borrar la materia:', err.message);
+        if(err.error === "SUBJECT_IN_USE"){
+            mensajeError.textContent = "La materia no se puede borrar porque tiene alumnos asignados";
+            mensajeError.style.display = "block";
+        }
+    }
+}
+
+Para el students es lo mismo pero buscando el id de student_id y devolviendo el error "STUDENT_IN_USE"

@@ -1,0 +1,40 @@
+1) Antes desde cada HTML se importaban los scripts, ahora solo se importa el controlador y este se encarga de importar los modulos que nesecite. Ej: studentsAPI.js
+
+2) En studentsController.js hay una nueva funcion, ahora el manejo del boton cancelar se hace aparte
+
+3) En studentsController.js se maneja el boton de cancelar y se pone en "" el campo oculto
+
+4) Como los archivos .js que se encargaban de consumir las APIs eran casi iguales (Solo diferian en la ruta a la que le hacian la peticion) se creo una apiFactory para poder modularizar y con solo el nombre del modulo ya se pueden usar las funciones del CRUD
+apiFactory es un archivo en el que se exporta una unica funcion que devuelve un objeto con las funciones para interactuar con alguna API
+
+Ej:
+
+Cuando hago import { studentsAPI } from '../api/studentsAPI.js'; lo que sucede es que se llama al archivo y se obtiene la variable studentsAPI
+
+Cuando aparece esa variable se importa el archivo apiFactory con la linea import { createAPI } from './apiFactory.js'; y se pide el objeto createAPI, en el archivo apiFactory.js esta funcion se ejecuta y devuelve las cuatro funciones para comunicarse con la API de students
+
+Luego de eso se puede hacer studentAPI.create por ejemplo, ya que las funciones ya estan disponibles con la API_URL correspondiente
+
+¿Qué logramos con estos archivos en el frontend?
+    ● Reutilizar código: No hace falta escribir de nuevo las funciones de fetch, create, update, remove para cada módulo.
+    ● Generalización: Con solo cambiar el nombre del módulo (students, subjects, etc.), el resto del sistema funciona igual.
+    ● Modularidad: Los controladores cómo studentsController.js trabajan con studentsAPI sin preocuparse por los detalles técnicos del servidor.
+
+5) En server.php vuelve a estar disponible la opcion del debug
+
+6) En server.php se agrego una funcion sendCodeMessage para poder mandar mensajes y codigos de estado, en lugar de tener que poner siempre esas dos lineas a mano
+
+7) Se agrego una validacion para evitar inyeccion de rutas o codigo malicioso, se usa la expresion regular ^\w+$ para decir que solo se aceptan letras, numeros y guiones bajos
+
+8) Como el codigo de los archivos de rutas era casi el mismo se creo routesFactory.php que segun
+el metodo que venga llama a la funcion handle del controlador correspondiente segun la ruta.
+Ademas se extiendo el codigo para que se puedan hacer validaciones sobre peticiones que no hayan sido validadas (Ej: El formulario de HTML valida que los campos no vengan vacios, pero si hice la peticion desde otro lado con un fetch en JS puede venir vacios) entonces tambien por seguridad es que se pueden agregar validaciones
+
+Lo que hace esto es tener un arreglo asociativo para ejecutar tal funcion segun el metodo, y si
+quiero ejecutar otra funcion para tal metodo se reemplaza esa opcion en el arreglo de handlers y
+al final se ejectua
+
+9) Cambios en las funciones handler de los controladores (POR QUE SI ES GET SE PASA POR EL CUERPO EL ID, DONDE SE HARIA ESO?)
+
+10) En el modelo ahora se devuelven ya los arreglos asociativos con MYSQLI_ASSOC ya que antes se generaba a mano
+

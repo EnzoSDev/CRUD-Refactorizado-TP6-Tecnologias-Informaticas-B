@@ -1,0 +1,7 @@
+ Es importante hacer validaciones en el frontend, por ejemplo con expresiones regulares en los formularios (PREGUNTA DE EXAMEN QUIZAS)
+ 
+ Problema en el archivo original:
+    Falta .html en la direccion de los archivos html al llamarlos en el index.html
+    Los comentarios en la BD estan mal, tengo que ir copiando y pegando sin los comentarios
+    
+Este codigo aplica MVC al frontend tambien. Por eso hay mas archivos

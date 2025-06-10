@@ -1,0 +1,14 @@
+1) Sacar modo debug en el server.php
+
+2) Nuevo manejo del tipo de recurso que se solicita al server.php
+
+3) Archivo nuevo studentsApi.js este es un puente entre el frontend y el backend, es el encargado
+de consumir la API creada en el backend para acceder a la base de datos (Esta API es el conjunto de server.php, los archivos de rutas, los controladores y los modelos. Esto a su vez
+es un subconjunto del backend)
+
+4) Ahora el controlador (Antes frontDispatcher.js) cambio, solo se encarga de la logica del frontend y USA studentsAPI.js
+para comunicarse con la API y no hacer todo junto como en la version 1.0
+
+########## IMPORTANTE ############
+Al haber usado el patron MVC se ve claramente como el proyecto se vuelve faclmente escalable, para nuevas paginas se crea un conjunto de archivos
+5) Hay 3 archivos HTML, uno por cada recurso y cada uno con su consumidor de la API, controlador JS, ruta php, controlador php y modelo php
