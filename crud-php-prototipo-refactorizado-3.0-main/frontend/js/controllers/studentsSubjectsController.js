@@ -30,7 +30,7 @@ async function initSelects()
         students.forEach(s => 
         {
             const option = document.createElement('option');
-            option.value = s.id;
+            option.value = s.id; /* Los value de cada option son los id de los estudiantes */
             option.textContent = s.fullname;
             studentSelect.appendChild(option);
         });
@@ -98,7 +98,7 @@ function getFormData()
 {
     return{
         id: document.getElementById('relationId').value.trim(),
-        student_id: document.getElementById('studentIdSelect').value,
+        student_id: document.getElementById('studentIdSelect').value, /* Agarrar el value del select es agarrar el valor del value del option seleccionado */
         subject_id: document.getElementById('subjectIdSelect').value,
         approved: document.getElementById('approved').checked ? 1 : 0
     };
@@ -115,6 +115,30 @@ async function loadRelations()
     try 
     {
         const relations = await studentsSubjectsAPI.fetchAll();
+
+        /*
+
+        relations es un array de objetos con la siguiente estructura:
+        [
+            {
+                id: 1,
+                student_id: 2,
+                subject_id: 3,
+                approved: "0",
+                student_fullname: "Juan Pérez",
+                subject_name: "Matemáticas"
+            },
+            {
+                id: 2,
+                student_id: 1,
+                subject_id: 4,
+                approved: "1",
+                student_fullname: "Ana García",
+                subject_name: "Física"
+            }
+        ]
+
+        */
         
         /**
          * DEBUG
@@ -189,9 +213,20 @@ function createActionsCell(relation)
 function fillForm(relation) 
 {
     document.getElementById('relationId').value = relation.id;
+    /* 
+
+    
+        En un <select>, la propiedad .value en JavaScript siempre contiene el value de la <option> seleccionada.
+        Por ejemplo, si el usuario elige un estudiante, select.value guarda el id (value) de esa opción.
+        Así, al leer o asignar select.value, trabajamos directamente con el value de la opción elegida.
+
+        Relation.student_id guarda el id del estudiante en esa iteracion, entonces si al value del select le doy esa id (Que es el value del opcion seleccionado)
+        se selecciona el estudiante correcto en el select.
+
+    */
     document.getElementById('studentIdSelect').value = relation.student_id;
     document.getElementById('subjectIdSelect').value = relation.subject_id;
-    document.getElementById('approved').checked = !!relation.approved;
+    document.getElementById('approved').checked = !!relation.approved; /* !1 es false, !false es true, convierto los entero a booleanos para el checkbox */
 }
 
 async function confirmDelete(id) 
